@@ -47,4 +47,10 @@ object semigroup extends Semigroup.ToSemigroupOps {
   }
 }
 
-object monoid extends Monoid.ToMonoidOps
+object monoid extends Monoid.ToMonoidOps{
+  implicit class MonoidListOps[A](val xs: List[A]) extends AnyVal {
+    def foldAll(implicit monoid: Monoid[A]): A = {
+      xs.fold(monoid.default)((a1, a2) => monoid.combine(a1, a2))
+    }
+  }
+}

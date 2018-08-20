@@ -14,6 +14,21 @@ object Monoid extends StdMonoidInstances[Monoid] {
     override def combine(xo: Option[T], yo: Option[T]): Option[T] =
       for (x <- xo; y <- yo) yield x |+| y
   }
+  object Laws {
+    def associativity[T](x: T, y: T, z: T)(implicit m: Monoid[T]): Boolean = {
+      (x |+| (y |+| z)) == ((x |+| y) |+| z)
+    }
+
+    def leftIdentity[T](x: T)(implicit m: Monoid[T]): Boolean = {
+      import m._
+      (empty |+| x) == x
+    }
+
+    def rightIdentity[T](x: T)(implicit m: Monoid[T]): Boolean = {
+      import m._
+      (x |+| empty) == x
+    }
+  }
 }
 
 trait StdMonoidInstances[TC[x] >: Monoid[x]] {
